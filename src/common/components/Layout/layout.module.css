@@ -1,0 +1,23 @@
+.header {
+  height: 4rem;
+  position: sticky;
+  top: 0;
+  background: var(--main-accent);
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem;
+  color: var(--white);
+  & a:visited {
+    color: var(--white);
+  }
+}
+
+
+.main {
+  max-width: 80rem;
+  padding: 1.5rem;
+  color: var(--light-orange);
+  background-color: var(--light-green);
+  margin: auto;
+}
