@@ -1,4 +1,4 @@
-import styles from './users-list.module.css';
+import styles from './users.module.css';
 import useQueryUsers from './useQueryUsers'
 import UserCard from './UserCard'
 
@@ -13,7 +13,7 @@ const UsersList = () => {
   }
 
   return (
-    <div>
+    <div className={styles['users-wrapper']}>
       {users?.map(u => (
         <UserCard user={u} key={u.id} />
       ))}

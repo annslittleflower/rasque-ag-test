@@ -9,12 +9,8 @@
 ## todo
 
 
-+ select one user (kinda auth)
-+ create context for auth
-+ after selection redirect to my-todos page
-
-
-
++ react-hook-form
++ zod
 + my todo page with ag-grid table
 + create todo
 + edit todo
@@ -23,13 +19,10 @@
 + Summary page that displays a ag-grid table of users with
 additional columns for total complete and incomplete todos.
 
-+ react-hook-form
-+ zod
 + load testing with reports
 + e2e testing
 + some python simple server (or just nginx)
 + hetzner hosting
-+ pwa ?
 + deploy script
 
 
@@ -57,7 +50,7 @@ additional columns for total complete and incomplete todos.
 
 
 
-## problems
+## todo list
 
 + at least minimal loading error handling missing
 + i18n missing
@@ -66,3 +59,6 @@ additional columns for total complete and incomplete todos.
 + no domain
 + no ssl
 + no ci/cd
++ classnames camelCase, not string in brackets
++ move routes to string constants
++ on my-todos page  show some message and button if no user, not just redirect

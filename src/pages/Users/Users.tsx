@@ -3,7 +3,7 @@ import {UsersList} from "@/features";
 const Users =  () => {
   return (
     <div>
-      <h2>Users</h2>
+      <h2>Choose your user:</h2>
       <UsersList />
     </div>
   );
