@@ -2,6 +2,7 @@ import styles from './todos.module.css';
 import { useAuthContext } from "@/common/contexts/auth";
 
 import {useQueryTodos, useUpdateTodoMutation} from './api'
+import TodoItem from './TodoItem';
 
 const TodosList = () => {
   const {currentUser} = useAuthContext()
@@ -15,25 +16,10 @@ const TodosList = () => {
   }
 
   return (
-    <div 
-    // className={styles['todos-wrapper']}
-    >
+    <div className={styles['todos-wrapper']}>
       {todos?.map(t => (
-        <div key={t.id}>
-          {t.id} &nbsp;
-          {t.completed.toString()} &nbsp;
-          {t.title} &nbsp;
-          {t.userId}
-        </div>
+        <TodoItem todo={t} key={t.id} />
       ))}
-
-      <button
-        onClick={() => {
-          updateTodoMutation.mutate({ userId: currentUser!.id, todoId: todos![0].id })
-        }}
-      >
-        Update First Todo
-      </button>
     </div>
   )
 }

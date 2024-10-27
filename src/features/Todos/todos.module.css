@@ -1,0 +1,49 @@
+.todos-wrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 36rem;
+  gap: 1.5rem;
+  padding: 2rem 0;
+}
+
+.todo {
+  display: flex;
+  border: 2px solid;
+  padding: 0.5rem 1rem;
+  gap: 1rem;
+  align-items: center;
+  border-radius: 0.25rem;
+  justify-content: space-between;
+}
+
+.checkbox {
+  min-width: 2rem;
+  min-height: 2rem;
+  max-width: 2rem;
+  max-height: 2rem;
+}
+
+.text-input {
+  padding: 0.5rem 1rem;
+  font-size: 1.2rem;
+  max-width: 15rem;
+  min-width: 10rem;
+  max-height: 2rem;
+}
+
+.update-button {
+  min-width: 6rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 2rem;
+  font-size: 1rem;
+  border: 1px solid transparent;
+  background-color: var(--orange);
+  color: var(--white);
+  font-weight: 700;
+
+
+  &:hover {
+    background-color: var(--main-accent);
+  }
+}
