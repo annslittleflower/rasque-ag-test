@@ -16,6 +16,19 @@
   justify-content: space-between;
 }
 
+.create-form {
+  margin-bottom: 2rem;
+}
+
+.create-checkbox {
+  margin-right: 1.5rem;
+}
+
+.create-inputs {
+  display: flex;
+  justify-content: space-between;
+}
+
 .checkbox {
   min-width: 2rem;
   min-height: 2rem;

@@ -10,7 +10,6 @@
 
 
 + my todo page with ag-grid table
-+ create todo
 
 + Summary page that displays a ag-grid table of users with
 additional columns for total complete and incomplete todos.

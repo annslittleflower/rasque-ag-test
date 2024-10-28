@@ -1,13 +1,14 @@
-import styles from './todos.module.css';
 import { useAuthContext } from "@/common/contexts/auth";
 
-import {useQueryTodos, useUpdateTodoMutation} from './api'
+import {useQueryTodos} from './api'
 import TodoItem from './TodoItem';
+import CreateTodoForm from './CreateTodoForm';
+import styles from './todos.module.css';
+
 
 const TodosList = () => {
   const {currentUser} = useAuthContext()
   const {todos, isLoading} = useQueryTodos(currentUser?.id)
-  const updateTodoMutation = useUpdateTodoMutation()
 
   if (isLoading) {
     return (
@@ -17,6 +18,7 @@ const TodosList = () => {
 
   return (
     <div className={styles['todos-wrapper']}>
+      <CreateTodoForm />
       {todos?.map(t => (
         <TodoItem todo={t} key={t.id} />
       ))}

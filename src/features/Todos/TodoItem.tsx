@@ -5,7 +5,7 @@ import styles from './todos.module.css';
 import { useAuthContext } from "@/common/contexts/auth";
 import type { Todo } from '@/common/types';
 
-import {useQueryTodos, useUpdateTodoMutation, useDeleteTodoMutation} from './api'
+import { useUpdateTodoMutation, useDeleteTodoMutation} from './api'
 
 
 const TodoSchema = z.object({
@@ -23,7 +23,7 @@ const TodoItem = ({todo}: {todo: Todo}) => {
   const {currentUser} = useAuthContext()
   const updateTodoMutation = useUpdateTodoMutation()
   const deleteTodoMutation = useDeleteTodoMutation()
-  const { register, handleSubmit, watch, formState: { errors } } = 
+  const { register, handleSubmit, formState: { errors } } = 
     useForm<TodoSchemaType>({ resolver: zodResolver(TodoSchema) });
   
   const onSubmit = (data: TodoSchemaType) => {
@@ -42,11 +42,12 @@ const TodoItem = ({todo}: {todo: Todo}) => {
     })
   }
 
-  console.log('errors', errors)
-  console.log('updateTodoMutation', updateTodoMutation.isPending)
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={styles['todo']}>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className={styles['todo']}
+    >
 
       <input
         className={styles['checkbox']}
