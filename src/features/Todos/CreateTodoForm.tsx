@@ -37,10 +37,6 @@ const CreateTodoForm = () => {
     })
 
   };
- 
-
-  console.log('errors', errors)
-  console.log('createTodoMutation', createTodoMutation.isPending)
 
   return (
     <form

@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useForm, useFieldArray } from "react-hook-form";
+import { z } from 'zod';
+import { zodResolver } from "@hookform/resolvers/zod";
 import { AgGridReact } from "ag-grid-react";
 import type { ColDef  } from 'node_modules/ag-grid-community/dist/types/core/main.d.ts';
 
@@ -7,29 +10,47 @@ import { Todo } from "@/common/types";
 import { classnames } from "@/common/utils/classnames";
 import {useQueryTodos} from './api'
 import TodoItem from './TodoItem';
+import { useUpdateTodoMutation, useDeleteTodoMutation} from './api'
+
 import CreateTodoForm from './CreateTodoForm';
 import styles from './todos.module.css';
 
-import { useUpdateTodoMutation, useDeleteTodoMutation} from './api'
+const TodoSchema = z.object({
+  theForm: z.object({
+    completed: z.boolean(),
+    title: z
+      .string()
+      .min(5)
+      .max(120)
+    }).array()
+  })
+
+type TodoSchemaType = z.infer<typeof TodoSchema>;
+
+
 
 const TodosList = () => {
   const {currentUser} = useAuthContext()
   const {todos, isLoading} = useQueryTodos(currentUser?.id)
-  // const deleteTodoMutation = useDeleteTodoMutation()
 
-  console.log('todos!!!', todos)
-
-  // const onDeleteTodo = (todoId: Todo['id']) => {
-  //   deleteTodoMutation.mutate({
-  //     userId: currentUser!.id,
-  //     todoId,
-  //   })
-  // }
-
-  // TODO maybe wrong here
-  // const [todosCopy, setTodosCopy] = useState(todos || [])
-
-
+  const { 
+    register, 
+    handleSubmit, 
+    control,
+    trigger,
+    reset,
+    getValues,
+    formState: {
+      errors,
+      isValid
+    } 
+  } = useForm<TodoSchemaType>({
+      resolver: zodResolver(TodoSchema),
+      shouldUnregister: true,
+      values: {
+        theForm: todos!
+      }
+    });
 
   const [colDefs, setColDefs] = useState<ColDef[]>([
     {
@@ -40,17 +61,20 @@ const TodosList = () => {
         alignItems: 'center'
       },
       suppressMovable: true,
-      cellRenderer: (p) => (
+      cellRenderer: (p) => {
+        console.log('p.node.rowIndex', p.node.rowIndex)
+        return (
         <input
+          key={p.node.rowIndex}
           className={styles['checkbox']}
           type='checkbox'
-          defaultChecked={p.data.completed}
+          // defaultChecked={p.data.completed}
+          {...register(`theForm.${p.node.rowIndex}.completed`)}
           onChange={({ target: { checked }})  => {
             p.setValue(checked)
           }}
-          // {...register("completed")}
         />
-      )
+      )}
     },
     {
       field: 'title',
@@ -63,14 +87,21 @@ const TodosList = () => {
       cellRenderer: (p) => (
         <div>
           <input
+            key={p.node.rowIndex}
+
+            // key={fields[p.node.rowIndex].id}
             className={styles['text-input']}
-            defaultValue={p.data.title}
-            onChange={({ target: { value }})  => {
+            // defaultValue={p.data.title}
+            // onChange={({ target: { value }})  => {
+            //   p.setValue(value)
+            // }}
+            // {...register('title')}
+            {...register(`theForm.${p.node.rowIndex}.title`)}
+            onChange={({ target: { value }}) => {
               p.setValue(value)
             }}
-            // {...register("title")}
           />
-          {/* {errors.title && <div>{errors.title.message}</div>} */}
+          {errors.theForm && <div>{errors.theForm![p.node.rowIndex]?.title?.message}</div>}
         </div>
       )
     },
@@ -84,23 +115,40 @@ const TodosList = () => {
       cellRenderer: (p) => {
         // doesnot react correctly if declared at the top 
         const deleteTodoMutation = useDeleteTodoMutation()
+        const updateTodoMutation = useUpdateTodoMutation()
+
+        const onSubmit = () => {
+          console.log('submut')
+          updateTodoMutation.mutate({
+            userId: currentUser!.id,
+            todoId: p.data.id,
+            completed: p.data.completed,
+            title: p.data.title
+          })
+        };
 
         return (
           <div className={styles['actions-wrapper']}>
             <button
               className={styles['update-button']}
-              // disabled={updateTodoMutation.isPending}
+              disabled={updateTodoMutation.isPending}
               type="button"
-              onClick={() => {
-                console.log('p', p)
-                console.log(JSON.stringify(p.data))
+              onClick={handleSubmit(onSubmit)}
+              // onClick={() => {
+              //   console.log('p', p)
+              //   console.log(JSON.stringify(p.data))
 
-                // this.grid.api.getRowNode(id).data
-              }}
+              //   updateTodoMutation.mutate({
+              //     userId: currentUser!.id,
+              //     todoId: p.data.id,
+              //     completed: p.data.completed,
+              //     title: p.data.title
+              //   })
+
+              // }}
               // onClick={handleSubmit(onSubmit)}
             >
-              update
-              {/* {updateTodoMutation.isPending ? 'wait...' : 'Update'}  */}
+              {updateTodoMutation.isPending ? 'wait...' : 'Update'} 
             </button>
 
             <button
@@ -123,17 +171,24 @@ const TodosList = () => {
     },
   ])
 
+
+  console.log('isLoading!!!', isLoading)
+  console.log('errors!!!', errors)
+
+
   if (isLoading) {
     return (
       <div>loading, please wait...</div>
     )
   }
 
-  // console.log('todosCopy', todosCopy)
+  console.log('getValues', getValues())
+
 
   return (
     <>
       <CreateTodoForm />
+      {errors.theForm && errors.theForm![0]?.title?.message}
 
       <div className={classnames([styles['todos-wrapper'], 'ag-theme-quartz'])}>
         <AgGridReact

@@ -39,8 +39,6 @@ const useCreateTodoMutation = () => {
     onSuccess: (data, variables, context) => {
       const userTodos = queryClient.getQueryData<Todo[]>(['todos', variables.userId])
 
-      console.log('after post', data)
-
       // id is 201 every time
       queryClient.setQueryData(['todos', variables.userId], [{...data, id: Math.random()}, ...userTodos!])
     },
