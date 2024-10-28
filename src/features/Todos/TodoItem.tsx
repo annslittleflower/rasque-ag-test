@@ -23,9 +23,14 @@ const TodoItem = ({todo}: {todo: Todo}) => {
   const {currentUser} = useAuthContext()
   const updateTodoMutation = useUpdateTodoMutation()
   const deleteTodoMutation = useDeleteTodoMutation()
-  const { register, handleSubmit, formState: { errors } } = 
+  const { register, handleSubmit, trigger, formState: { errors } } = 
     useForm<TodoSchemaType>({ resolver: zodResolver(TodoSchema) });
   
+    // onClick={() => {
+    //   trigger("title");
+    // }}
+
+
   const onSubmit = (data: TodoSchemaType) => {
     updateTodoMutation.mutate({
       userId: currentUser!.id,
@@ -42,10 +47,9 @@ const TodoItem = ({todo}: {todo: Todo}) => {
     })
   }
 
-
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
+    <div
+      // onSubmit={handleSubmit(onSubmit)}
       className={styles['todo']}
     >
 
@@ -68,7 +72,9 @@ const TodoItem = ({todo}: {todo: Todo}) => {
       <button
         className={styles['update-button']}
         disabled={updateTodoMutation.isPending}
-        type='submit'
+        // type='submit'
+        type="button"
+        onClick={handleSubmit(onSubmit)}
       >
         {updateTodoMutation.isPending ? 'wait...' : 'Update'} 
       </button>
@@ -82,7 +88,7 @@ const TodoItem = ({todo}: {todo: Todo}) => {
         {deleteTodoMutation.isPending ? 'wait...' : 'Delete'} 
       </button>
 
-    </form>
+    </div>
   )
 }
 

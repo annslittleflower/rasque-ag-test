@@ -71,7 +71,7 @@ const CreateTodoForm = () => {
         disabled={createTodoMutation.isPending}
         type='submit'
       >
-        {createTodoMutation.isPending ? 'wait...' : 'create'} 
+        {createTodoMutation.isPending ? 'wait...' : 'add todo'} 
       </button>
     </form>
   )

@@ -1,10 +1,12 @@
 .todos-wrapper {
   display: flex;
   flex-direction: column;
-  max-width: 36rem;
+  max-width: 45rem;
   gap: 1.5rem;
   padding: 2rem 0;
+  height: 600px;
 }
+
 
 .todo {
   display: flex;
@@ -17,7 +19,8 @@
 }
 
 .create-form {
-  margin-bottom: 2rem;
+  margin: 2rem 0;
+  max-width: 45rem;
 }
 
 .create-checkbox {
@@ -42,6 +45,11 @@
   max-width: 15rem;
   min-width: 10rem;
   max-height: 2rem;
+}
+
+.actions-wrapper {
+  display: flex;
+  gap: 1rem;
 }
 
 .update-button {
