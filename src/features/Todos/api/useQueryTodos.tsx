@@ -1,12 +1,21 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import type { Todo, User } from '@/common/types';
 
 
 const useQueryTodos = (userId?: User['id'] ) => {
+  const queryClient = useQueryClient()
+
   const result = useQuery<Todo[]>({
     enabled: !!userId,
     queryKey: ['todos', userId],
     queryFn: async () => {
+      const cachedUserTodos = queryClient.getQueryData<Todo[]>(['todos', userId])
+
+      // server doesnot work, so we will simulate saving
+      if (cachedUserTodos) {
+        return cachedUserTodos
+      }
+
       const response = await fetch(`https://jsonplaceholder.typicode.com/users/${userId}/todos`);
 
       if (!response.ok) {

@@ -47,6 +47,12 @@
   max-height: 2rem;
 }
 
+.error-text {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: var(--error)
+}
+
 .actions-wrapper {
   display: flex;
   gap: 1rem;

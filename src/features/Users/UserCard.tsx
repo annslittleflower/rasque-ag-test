@@ -9,7 +9,7 @@ const UserCard = ({user}: {user: User}) => {
   const {setCurrentUser} = useAuthContext()
 
   const onUserSelect = () => {
-    console.log('user', user)
+    // console.log('user', user)
     setCurrentUser(user)
     navigate('/my-todos')
   }

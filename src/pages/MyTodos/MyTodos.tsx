@@ -8,7 +8,7 @@ const MyTodos =  () => {
   const navigate = useNavigate();
   const {currentUser} = useAuthContext()
 
-  console.log('currentUser', currentUser)
+  // console.log('currentUser', currentUser)
 
   useEffect(() => {
     if (!currentUser) {

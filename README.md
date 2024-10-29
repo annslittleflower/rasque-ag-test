@@ -8,9 +8,6 @@
 
 ## todo
 
-
-+ my todo page with ag-grid table
-
 + Summary page that displays a ag-grid table of users with
 additional columns for total complete and incomplete todos.
 
@@ -18,7 +15,6 @@ additional columns for total complete and incomplete todos.
 + e2e testing
 + some python simple server (or just nginx)
 + hetzner hosting
-+ deploy script
 
 
 
