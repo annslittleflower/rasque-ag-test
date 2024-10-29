@@ -36,7 +36,7 @@ const useCreateTodoMutation = () => {
 
   return useMutation({
     mutationFn: apiFunction,
-    onSuccess: (data, variables, context) => {
+    onSuccess: (data, variables, _) => {
       const userTodos = queryClient.getQueryData<Todo[]>(['todos', variables.userId])
 
       // id is 201 every time

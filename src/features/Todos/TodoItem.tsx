@@ -23,13 +23,8 @@ const TodoItem = ({todo}: {todo: Todo}) => {
   const {currentUser} = useAuthContext()
   const updateTodoMutation = useUpdateTodoMutation()
   const deleteTodoMutation = useDeleteTodoMutation()
-  const { register, handleSubmit, trigger, formState: { errors, isValid } } = 
+  const { register, handleSubmit, formState: { errors } } = 
     useForm<TodoSchemaType>({ resolver: zodResolver(TodoSchema) });
-  
-    // onClick={() => {
-    //   trigger("title");
-    // }}
-
 
   const onSubmit = (data: TodoSchemaType) => {
     updateTodoMutation.mutate({
@@ -49,7 +44,6 @@ const TodoItem = ({todo}: {todo: Todo}) => {
 
   return (
     <div
-      // onSubmit={handleSubmit(onSubmit)}
       className={styles['todo']}
     >
 

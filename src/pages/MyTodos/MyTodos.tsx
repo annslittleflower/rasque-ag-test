@@ -8,12 +8,9 @@ const MyTodos =  () => {
   const navigate = useNavigate();
   const {currentUser} = useAuthContext()
 
-  // console.log('currentUser', currentUser)
-
   useEffect(() => {
     if (!currentUser) {
-      // TODO uncomment this in the end
-      // navigate('/')
+      navigate('/')
     }
   }, [currentUser])
 

@@ -28,6 +28,7 @@ const useDeleteTodoMutation = () => {
 
   return useMutation({
     mutationFn: apiFunction,
+    // @ts-ignore
     onSuccess: (data, variables, context) => {
       const userTodos = queryClient.getQueryData<Todo[]>(['todos', variables.userId])
 

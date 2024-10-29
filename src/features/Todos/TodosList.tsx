@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useForm } from "react-hook-form";
 
 import { z } from 'zod';
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -32,10 +31,10 @@ const TodosList = () => {
   const {currentUser} = useAuthContext()
   const {todos, isLoading} = useQueryTodos(currentUser?.id)
   const [todosCopy, setTodosCopy] = useState<Todo[]>()
-  const queryClient = useQueryClient()
 
   useEffect(() => {
-    if (todos && !todosCopy) {
+    if (!todos) return
+    if ( (todos?.length !== todosCopy?.length)) {
       setTodosCopy(todos.map(i => JSON.parse(JSON.stringify(i))))
     }
   }, [todos])
@@ -43,11 +42,11 @@ const TodosList = () => {
   const { 
     register, 
     handleSubmit, 
-    getValues,
     formState: {
       errors,
     } 
   } = useForm<TodoSchemaType>({
+      shouldFocusError: false,
       resolver: zodResolver(TodoSchema),
       values: {
         theForm: todosCopy!
@@ -63,9 +62,7 @@ const TodosList = () => {
   const valuesRef = useRef<any>()
   valuesRef.current = todosCopy
 
-  console.log('TOP VALUES', getValues())
-
-  const [colDefs, setColDefs] = useState<ColDef[]>([
+  const [colDefs, _] = useState<ColDef[]>([
     {
       field: 'completed',
       cellDataType: 'boolean',
@@ -80,7 +77,7 @@ const TodosList = () => {
         formErrors: () => errorRef.current,
         formValues: () => valuesRef.current
       },
-      cellRenderer: (p) => {
+      cellRenderer: (p: any) => {
         const currentValue = p.formValues()[p.node.rowIndex]
         const {onChange, ...rest} = register(`theForm.${p.node.rowIndex}.completed`);
 
@@ -113,9 +110,8 @@ const TodosList = () => {
         formErrors: () => errorRef.current,
         formValues: () => valuesRef.current
       },
-      cellRenderer: (p) => {
+      cellRenderer: (p: any) => {
         const currentValue = p.formValues()[p.node.rowIndex]
-        // console.log('currentValue', currentValue)
 
         const {onChange, ...rest} = register(`theForm.${p.node.rowIndex}.title`);
 
@@ -129,9 +125,6 @@ const TodosList = () => {
               onChange={(event) => {
                 onChange(event)
                 p.setValue(event.target.value)
-                console.log('change ref', errorRef)
-                // const thisRow = p.api.getDisplayedRowAtIndex(p.node.rowIndex)
-                // p.api.redrawRows({ rowNodes: [thisRow] })
               }}
             />
             {p.formErrors().theForm && <div className={styles['error-text']}>{p.formErrors().theForm![p.node.rowIndex]?.title?.message}</div>}
@@ -149,12 +142,11 @@ const TodosList = () => {
 
       sortable: false,
       cellRendererParams: {
-        // forErrors: errors,
         formErrors: () => errorRef.current,
         formValues: () => valuesRef.current
       },
       
-      cellRenderer: (p) => {
+      cellRenderer: (p: any) => {
         const deleteTodoMutation = useDeleteTodoMutation()
         const updateTodoMutation = useUpdateTodoMutation()
 
@@ -166,13 +158,26 @@ const TodosList = () => {
             title: p.data.title
           }, {
             onSuccess: () => {
-              // errorRef.current = {}
-              // reset()
               const thisRow = p.api.getDisplayedRowAtIndex(p.node.rowIndex)
               p.api.redrawRows({ rowNodes: [thisRow] })
             }
           })
         };
+
+        // @ts-ignore
+        const onError = (...par) => {
+          const hasCurrentRowError = par[0].theForm[p.node.rowIndex]
+
+          if (!hasCurrentRowError) {
+            onSubmit()
+            return;
+          }
+
+          errorRef.current = par[0]
+
+          const thisRow = p.api.getDisplayedRowAtIndex(p.node.rowIndex)
+          p.api.redrawRows({ rowNodes: [thisRow] })
+        }
 
         return (
           <div className={styles['actions-wrapper']}>
@@ -181,15 +186,7 @@ const TodosList = () => {
               disabled={updateTodoMutation.isPending}
               type="button"
               onClick={() => {
-                const submitFunc = handleSubmit(onSubmit, (...par) => {
-                  console.log('par', par)
-                  errorRef.current = par[0]
-
-                  const thisRow = p.api.getDisplayedRowAtIndex(p.node.rowIndex)
-                  p.api.redrawRows({ rowNodes: [thisRow] })
-                });
-                
-                submitFunc()
+                handleSubmit(onSubmit, onError)();
               }}
             >
               {updateTodoMutation.isPending ? 'wait...' : 'Update'} 
@@ -219,8 +216,6 @@ const TodosList = () => {
       <div>loading, please wait...</div>
     )
   }
-
-  console.log('errors!!!', errors)
 
   return (
     <>

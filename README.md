@@ -6,17 +6,6 @@
 **warning**   server will be deleted on November 28th 
 
 
-## todo
-
-+ Summary page that displays a ag-grid table of users with
-additional columns for total complete and incomplete todos.
-
-+ load testing with reports
-+ e2e testing
-+ some python simple server (or just nginx)
-+ hetzner hosting
-
-
 
 ## installation
 
@@ -38,11 +27,15 @@ additional columns for total complete and incomplete todos.
 ## some notes
 
 +  `vite` is used, because `create-react-app` is deprecated
-
++ code is horrible sometimes due to lack of time, but works 
++ consider this repo as experiment trying to combine react-hook-form + ag-grid, not a production code
++ summary table looks bad, i think its because group features dont work in free ag-grid version
 
 
 ## todo list
 
++ input errors out of sync
++ testing
 + at least minimal loading error handling missing
 + i18n missing
 + `noUncheckedSideEffectImports` is for some reason unknown compiler option

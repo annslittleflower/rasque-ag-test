@@ -3,7 +3,6 @@ import { z } from 'zod';
 import { zodResolver } from "@hookform/resolvers/zod";
 import styles from './todos.module.css';
 import { useAuthContext } from "@/common/contexts/auth";
-import type { Todo } from '@/common/types';
 import { classnames } from "@/common/utils/classnames";
 
 import { useCreateTodoMutation} from './api'
