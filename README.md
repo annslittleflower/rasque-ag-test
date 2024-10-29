@@ -1,11 +1,6 @@
 # rasque-ag-test
 
 
-[Live link - https://google.com/](https://google.com/)
-
-**warning**   server will be deleted on November 28th 
-
-
 
 ## installation
 
